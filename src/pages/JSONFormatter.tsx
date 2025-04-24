@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Box, Button, TextField, Card, CardContent, Grid, Typography, List, ListItem } from '@mui/material';
 import { JsonView } from 'react-json-view-lite';
 import 'react-json-view-lite/dist/index.css';
+import { JSONObject } from '@/types/JSON';
 
 export default function JSONFormatterPage() {
   const [rawData, setRawData] = useState('');
@@ -33,15 +34,13 @@ export default function JSONFormatterPage() {
     }
   };
 
-  type JSON = null | string | number | boolean | JSON[] | Record<string, JSON>;
-
   interface KeyPath {
     path: string[];
     isArrayPath: boolean[];
   }
 
   const findPaths = useCallback((
-    obj: JSON,
+    obj: JSONObject,
     key: string,
     currentPath: string[] = [],
     isArrayFlags: boolean[] = []
@@ -63,7 +62,7 @@ export default function JSONFormatterPage() {
       if (k === key) {
         result.push({ path: nextPath, isArrayPath: nextFlags });
       }
-      result.push(...findPaths(value as JSON, key, nextPath, nextFlags));
+      result.push(...findPaths(value as JSONObject, key, nextPath, nextFlags));
     }
     return result;
   }, []);
