@@ -5,7 +5,7 @@ import DefaultLayout from '@/layouts/DefaultLayout';
 
 const Router = () => {
   return (
-    <BrowserRouter basename='/toolbox'>
+    <BrowserRouter>
       <Routes>
           <Route path="/" element={<DefaultLayout />}>
             <Route index element={<Navigate to="/json-formatter" replace />} />
