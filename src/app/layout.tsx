@@ -1,5 +1,6 @@
 import "./globals.css";
 
+import Script from "next/script";
 import type { Metadata } from "next";
 
 import AnalyticsScripts from "../components/AnalyticsScripts";
@@ -23,16 +24,26 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const locale = await resolveLocale();
   const messages = getMessages(locale);
 
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID ?? process.env.GTM_ID;
+  const gaId = process.env.NEXT_PUBLIC_GA_ID ?? process.env.GA_ID;
+  const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT ?? process.env.ADSENSE_CLIENT;
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        {adsenseClient ? (
+          <Script
+            id="adsbygoogle-loader"
+            strategy="afterInteractive"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+            crossOrigin="anonymous"
+          />
+        ) : null}
         <ThemeScript />
       </head>
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
         <ThemeProvider>
-          <AnalyticsScripts />
+          <AnalyticsScripts gtmId={gtmId} gaId={gaId} />
           {gtmId ? (
             <noscript
               dangerouslySetInnerHTML={{

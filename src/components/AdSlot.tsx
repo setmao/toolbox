@@ -47,10 +47,13 @@ const AdSlot = ({
     loadAdsScript(adsClient!);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (window as any).adsbygoogle = (window as any).adsbygoogle || [];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (window as any).adsbygoogle.push({});
+      type AdsByGoogleWindow = Window & {
+        adsbygoogle?: Array<Record<string, unknown>>;
+      };
+
+      const adsWindow = window as AdsByGoogleWindow;
+      adsWindow.adsbygoogle = adsWindow.adsbygoogle ?? [];
+      adsWindow.adsbygoogle.push({});
     } catch (error) {
       // ignore
     }

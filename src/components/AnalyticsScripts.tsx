@@ -2,9 +2,12 @@
 
 import Script from "next/script";
 
-const AnalyticsScripts = () => {
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+type AnalyticsScriptsProps = {
+  gtmId?: string;
+  gaId?: string;
+};
+
+const AnalyticsScripts = ({ gtmId, gaId }: AnalyticsScriptsProps) => {
 
   return (
     <>
