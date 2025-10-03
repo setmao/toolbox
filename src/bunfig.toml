@@ -1,0 +1,4 @@
+[install]
+hooks.postinstall = ["bunx tailwindcss init -p" ]
+
+default-origin = "https://registry.npmjs.org"

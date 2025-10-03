@@ -1,0 +1,78 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - '.github/workflows/frontend-deploy.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: frontend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and Upload Frontend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      FRONTEND_BUCKET_NAME: ${{ vars.FRONTEND_BUCKET_NAME }}
+      GOOGLE_CLOUD_PROJECT: ${{ vars.GCP_PROJECT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: src
+        run: bun install --frozen-lockfile
+
+      - name: Build frontend
+        working-directory: src
+        run: bun run build
+
+      - name: Export static assets
+        working-directory: src
+        run: bunx next export
+
+      - name: Ensure export output exists
+        run: |
+          if [ ! -d "src/out" ]; then
+            echo "Expected export directory src/out was not generated." >&2
+            exit 1
+          fi
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+
+      - name: Set up gcloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GOOGLE_CLOUD_PROJECT }}
+          version: '>= 540.0.0'
+
+      - name: Verify bucket configuration
+        run: |
+          if [ -z "${FRONTEND_BUCKET_NAME}" ]; then
+            echo "FRONTEND_BUCKET_NAME is not set. Configure repository variable FRONTEND_BUCKET_NAME." >&2
+            exit 1
+          fi
+
+      - name: Deploy to Cloud Storage
+        env:
+          EXPORT_DIR: src/out
+          DESTINATION: gs://${{ env.FRONTEND_BUCKET_NAME }}
+        run: |
+          gsutil -m rsync -r -d "$EXPORT_DIR" "$DESTINATION"
