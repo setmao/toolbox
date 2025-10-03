@@ -23,8 +23,9 @@ jobs:
     env:
       FRONTEND_BUCKET_NAME: ${{ vars.FRONTEND_BUCKET_NAME }}
       GOOGLE_CLOUD_PROJECT: ${{ vars.GCP_PROJECT_ID }}
-      GTM_ID: ${{ secrets.GTM_ID }}
-      GA_ID: ${{ secrets.GA_ID }}
+      NEXT_PUBLIC_GTM_ID: ${{ secrets.GTM_ID }}
+      NEXT_PUBLIC_GA_ID: ${{ secrets.GA_ID }}
+      NEXT_PUBLIC_ADSENSE_CLIENT: ${{ secrets.ADSENSE_CLIENT }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
