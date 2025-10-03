@@ -3,10 +3,10 @@ src/node_modules
 src/turbo
 src/.next
 src/.bun
+src/out
 
 # Mac
 .DS_Store
 
 # Env files
 *.env
-

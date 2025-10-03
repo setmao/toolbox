@@ -1,17 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
-import type { Locale } from "../lib/i18n/config";
-import type { Messages } from "../lib/i18n/messages";
-import LanguageSwitcher from "./LanguageSwitcher";
+import { useLocalization } from "./LocalizationProvider";
 import ThemeToggle from "./ThemeToggle";
+import LanguageSwitcher from "./LanguageSwitcher";
 
-type HeaderProps = {
-  locale: Locale;
-  messages: Messages;
-};
+const Header = () => {
+  const { messages } = useLocalization();
 
-const Header = ({ locale, messages }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-slate-950/70">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 text-sm text-slate-700 md:px-6 dark:text-slate-100">
@@ -45,7 +43,6 @@ const Header = ({ locale, messages }: HeaderProps) => {
         <div className="flex items-center gap-3">
           <ThemeToggle label={messages.nav.themeToggle} />
           <LanguageSwitcher
-            locale={locale}
             label={messages.nav.language.label}
             englishLabel={messages.nav.language.english}
             chineseLabel={messages.nav.language.traditionalChinese}

@@ -40,8 +40,8 @@ Once everything is configured, pushes to `main` automatically apply the latest T
 When code inside `src/` changes and is pushed to `main`, `.github/workflows/frontend-deploy.yml` will:
 
 - Install dependencies and build the Next.js project using Bun.
-- Run `next export` to generate the static site into `src/out`.
+- Run `bunx next build` (with `output: "export"` configured) to generate the static site into `src/out`.
 - Authenticate against GCP using the same Workload Identity Federation configuration.
 - Sync the exported static assets to the Cloud Storage bucket defined by `FRONTEND_BUCKET_NAME`.
 
-If the project relies on dynamic Next.js features that block `next export`, adjust your application or tweak the workflow build strategy.
+If the project relies on dynamic-only Next.js features, adjust the implementation or hosting strategy so it remains compatible with static exports.

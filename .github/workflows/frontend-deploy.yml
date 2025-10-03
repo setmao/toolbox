@@ -43,11 +43,7 @@ jobs:
         working-directory: src
         run: bun run build
 
-      - name: Export static assets
-        working-directory: src
-        run: bunx next export
-
-      - name: Ensure export output exists
+      - name: Ensure static export exists
         run: |
           if [ ! -d "src/out" ]; then
             echo "Expected export directory src/out was not generated." >&2
