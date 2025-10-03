@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+}
+
+a {
+  @apply text-cyan-600 transition hover:text-cyan-500 dark:text-cyan-300 dark:hover:text-cyan-200;
+}
+
+.main-gradient {
+  background:
+    radial-gradient(160% 160% at 0% 0%, rgba(59, 130, 246, 0.18) 0%, rgba(255, 255, 255, 0) 60%),
+    radial-gradient(160% 160% at 100% -20%, rgba(16, 185, 129, 0.12) 0%, rgba(255, 255, 255, 0) 65%),
+    linear-gradient(180deg, rgba(250, 253, 255, 0.95) 0%, rgba(241, 245, 249, 0.75) 60%, rgba(241, 245, 249, 0.6) 100%);
+}
+
+.dark .main-gradient {
+  background:
+    radial-gradient(160% 160% at 15% -25%, rgba(96, 165, 250, 0.28) 0%, rgba(15, 23, 42, 0) 58%),
+    radial-gradient(150% 150% at 100% 10%, rgba(45, 212, 191, 0.2) 0%, rgba(15, 23, 42, 0) 65%),
+    linear-gradient(185deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.88) 55%, rgba(15, 23, 42, 0.92) 100%);
+}
